@@ -62,7 +62,7 @@ public class JMXSearch {
 			final MBeanServerConnection mbsc = connector.getMBeanServerConnection();
 			log.info("Connection successful");
 
-			// If null == couldn't find
+			// If still null == couldn't find mbean
 			ObjectInstance objectInstance = null;
 			try {
 				objectInstance = mbsc.getObjectInstance(new ObjectName(MBEAN_NAME));
