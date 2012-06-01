@@ -7,7 +7,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 /**
- * Provides runtime statistics for
+ * Provides runtime statistics for classes loaded in a Sun JVM.
  * 
  * @author Alex Collins: github.com/atc- alexcollins.org
  */
