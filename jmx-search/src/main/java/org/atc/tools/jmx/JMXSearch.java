@@ -225,14 +225,4 @@ public class JMXSearch {
 	private static void printHelp() {
 		log.info("Valid options are: -h hostname -t port -u username -p password -s queryterm -m mbeanName[ -r -d]");
 	}
-
-	// /**
-	// * Calls {@code System.exit} with the given status
-	// *
-	// * @param status
-	// * the exit code
-	// */
-	// private static void exit(final int status) {
-	// System.exit(status);
-	// }
 }
