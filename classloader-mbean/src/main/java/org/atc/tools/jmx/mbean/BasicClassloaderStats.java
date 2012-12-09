@@ -32,8 +32,9 @@ public class BasicClassloaderStats implements ClassloaderStatsMBean {
 				for (final Field f : cl.getClass().getFields()) {
 					log.severe("Found field " + f.getName());
 				}
+
 				@SuppressWarnings("rawtypes")
-				Vector classes = (Vector) field.get(cl);
+				final Vector classes = (Vector) field.get(cl);
 				for (final Object o : classes) {
 					classNames.add(String.valueOf(o));
 				}
