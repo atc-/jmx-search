@@ -34,7 +34,6 @@ import org.atc.tools.jmx.domain.Options;
  */
 public class JMXSearch {
 
-	private static final String MBEAN_NAME = "org.atc:type=ClassloaderStats";
 	private static final Logger log = Logger.getLogger("JMXSearch");
 
 	/**
@@ -97,7 +96,7 @@ public class JMXSearch {
 					log.info(format("Couldn't unregister MBean. Does it exist? %s", unregisterEx));
 				}
 			}
-			
+
 		} catch (final MalformedURLException e) {
 			log.severe(format("Bad URL format! %s", e));
 		} catch (final IOException e) {
