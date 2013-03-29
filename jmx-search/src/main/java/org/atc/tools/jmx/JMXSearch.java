@@ -39,7 +39,6 @@ public class JMXSearch {
 
 	/**
 	 * Parse the arguments, validate, and execute the JMX layer if appropriate.
-	 * 
 	 * @param args
 	 *            the command line arguments
 	 * @throws IOException
@@ -47,9 +46,14 @@ public class JMXSearch {
 	 */
 	public static void main(final String[] args) throws IOException {
 		final Options opts = parseCommandLineOptions(args);
-
-		if (!valid(opts)) {
-			// exit(4);
+		log.info(format("Got options '%s'", opts));
+		final boolean optionsValid = valid(opts);
+		log.info(format("Are the options valid: '%s'", optionsValid));
+	
+		if (!optionsValid) {
+			log.severe("Not enough or invalid options supplied");
+			printHelp();
+			System.exit(255);
 		}
 
 		final String jmxURL = "service:jmx:rmi:///jndi/rmi://" + opts.getHostname() + ":" + opts.getPort()
@@ -64,26 +68,30 @@ public class JMXSearch {
 
 			// If still null == couldn't find mbean
 			ObjectInstance objectInstance = null;
+			final ObjectName objName = new ObjectName(opts.getMbeanName());
+	
 			try {
-				objectInstance = mbsc.getObjectInstance(new ObjectName(MBEAN_NAME));
+				log.info(format("Looking for object '%s'", opts.getMbeanName()));
+				objectInstance = mbsc.getObjectInstance(objName);
 				log.info("Found instance " + objectInstance);
 			} catch (final InstanceNotFoundException e) {
 				log.info(format("Couldn't find object instance: %s", e));
 			}
 
-			if (opts.isRegister() && objectInstance == null) {
-				log.info("Registering MBean...");
-				registerMBean(mbsc, org.atc.tools.jmx.mbean.BasicClassloaderStats.class.getName(),
-						new ObjectName(MBEAN_NAME));
-				log.info("Registered");
-			} else {
-				log.info("MBean not registered as it already exists!");
+			if (opts.isRegister()) {
+				if (objectInstance == null) {
+					log.info("Registering MBean...");
+					registerMBean(mbsc, org.atc.tools.jmx.mbean.BasicClassloaderStats.class.getName(), objName);
+					log.info("Registered");
+				} else {
+					log.info("MBean not registered: it may already exist");
+				}
 			}
 
 			if (opts.isUnregister()) {
 				log.info("Unregistering MBean...");
 				try {
-					unregisterMBean(mbsc, new ObjectName(MBEAN_NAME));
+					unregisterMBean(mbsc, objName);
 					log.info("MBean removed");
 				} catch (final InstanceNotFoundException unregisterEx) {
 					log.info(format("Couldn't unregister MBean. Does it exist? %s", unregisterEx));
@@ -169,7 +177,8 @@ public class JMXSearch {
 	 * @return true or false
 	 */
 	private static boolean valid(final Options opts) {
-		return !StringUtils.isBlank(opts.getQuery());
+		return StringUtils.isNotBlank(opts.getQuery()) && StringUtils.isNotBlank(opts.getHostname()) &&
+			opts.getPort() > 0 && StringUtils.isNotBlank(opts.getMbeanName());
 	}
 
 	/**
@@ -178,11 +187,13 @@ public class JMXSearch {
 	 * @return an instance of Options
 	 */
 	private static Options parseCommandLineOptions(final String[] args) {
-		final Getopt g = new Getopt("JMXSearch", args, "h:t:u:p:s:rd"); // TODO: document
+		final Getopt g = new Getopt("JMXSearch", args, "h:t:u:p:s:m:rd");// TODO:
+																		// document
 		final Options opts = new Options();
 
 		int c;
 		while ((c = g.getopt()) != -1) {
+			log.fine(format("Parsing option '%s'", c));
 			switch (c) {
 			case 'h':
 				opts.setHostname(g.getOptarg());
@@ -199,6 +210,9 @@ public class JMXSearch {
 			case 's':
 				opts.setQuery(g.getOptarg());
 				break;
+			case 'm':
+				opts.setMbeanName(g.getOptarg());
+				break;
 			case 'r':
 				opts.setRegister(true);
 				break;
@@ -212,5 +226,9 @@ public class JMXSearch {
 		}
 		log.fine(format("Parsed arguments '%s'", opts));
 		return opts;
+	}
+
+	private static void printHelp() {
+		log.info("Valid options are: -h hostname -t port -u username -p password -s queryterm -m mbeanName[ -r -d]");
 	}
 }

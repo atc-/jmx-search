@@ -9,6 +9,7 @@ public class Options {
 	private String query;
 	private boolean register = false;
 	private boolean unregister = false;
+	private String mbeanName;
 
 	public Options() {
 		super();
@@ -70,10 +71,18 @@ public class Options {
 		this.unregister = unregister;
 	}
 
+	public String getMbeanName() {
+		return mbeanName;
+	}
+
+	public void setMbeanName(String mbeanName) {
+		this.mbeanName = mbeanName;
+	}
+
 	@Override
 	public String toString() {
 		return "Options [hostname=" + hostname + ", port=" + port + ", username=" + username + ", password="
 				+ password + ", query=" + query + ", register=" + register + ", unregister=" + unregister
-				+ "]";
+				+ ", mbeanName=" + mbeanName + "]";
 	}
 }
