@@ -172,9 +172,13 @@ public class JMXSearch {
 		return !StringUtils.isBlank(opts.getQuery());
 	}
 
+	/**
+	 * Read the command line options in args and encapsulate them in an instance of Options.
+	 * @param args the command line arguments
+	 * @return an instance of Options
+	 */
 	private static Options parseCommandLineOptions(final String[] args) {
-		final Getopt g = new Getopt("JMXSearch", args, "h:t:u:p:s:rd");// TODO:
-																		// document
+		final Getopt g = new Getopt("JMXSearch", args, "h:t:u:p:s:rd"); // TODO: document
 		final Options opts = new Options();
 
 		int c;
@@ -209,14 +213,4 @@ public class JMXSearch {
 		log.fine(format("Parsed arguments '%s'", opts));
 		return opts;
 	}
-
-	// /**
-	// * Calls {@code System.exit} with the given status
-	// *
-	// * @param status
-	// * the exit code
-	// */
-	// private static void exit(final int status) {
-	// System.exit(status);
-	// }
 }
