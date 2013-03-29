@@ -141,10 +141,9 @@ public class JMXSearch {
 	}
 
 	/**
-	 * Get a JMXConnection for the given connector String
-	 * 
-	 * @param jmxGlassFishConnectorString
-	 * @return
+	 * Get a JMXConnection for the given connector String.
+	 * @param jmxGlassFishConnectorString the URI for connecting
+	 * @return an instance of JMXConnector
 	 * @throws IOException
 	 *             if connection to the remote server fails
 	 */
@@ -186,8 +185,7 @@ public class JMXSearch {
 	 * @return an instance of Options
 	 */
 	private static Options parseCommandLineOptions(final String[] args) {
-		final Getopt g = new Getopt("JMXSearch", args, "h:t:u:p:s:m:rd");// TODO:
-																		// document
+		final Getopt g = new Getopt("JMXSearch", args, "h:t:u:p:q:m:rd");// TODO: document
 		final Options opts = new Options();
 
 		int c;
@@ -206,7 +204,7 @@ public class JMXSearch {
 			case 'p':
 				opts.setPassword(g.getOptarg());
 				break;
-			case 's':
+			case 'q':
 				opts.setQuery(g.getOptarg());
 				break;
 			case 'm':
@@ -228,6 +226,6 @@ public class JMXSearch {
 	}
 
 	private static void printHelp() {
-		log.info("Valid options are: -h hostname -t port -u username -p password -s queryterm -m mbeanName[ -r -d]");
+		log.info("Valid options are: -h hostname -t port -u username -p password -q queryterm -m mbeanName[ -r -d]");
 	}
 }
