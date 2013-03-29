@@ -10,4 +10,4 @@ Run `mvn clean compile assembly:single`. This produces a JAR with all dependenci
 
 To run jmx-search, do:
 
-	java -jar target/jmx-search-1.0-SNAPSHOT-jar-with-dependencies.jar -h yourhostname -t 8686 -u admin -p 1234 -r -q my-search-term -m mbeanName
+	java -jar target/jmx-search-1.0-SNAPSHOT-jar-with-dependencies.jar -h localhost -t 8686 -u admin -p 1234 -q search-term -r -m mbeanName
