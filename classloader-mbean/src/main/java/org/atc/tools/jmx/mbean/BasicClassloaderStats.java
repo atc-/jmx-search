@@ -29,7 +29,11 @@ public class BasicClassloaderStats implements ClassloaderStatsMBean {
 				if (field != null) {
 					field.setAccessible(true);
 				}
-				
+
+				for (final Field f : cl.getClass().getFields()) {
+					log.severe("Found field " + f.getName());
+				}
+
 				@SuppressWarnings("rawtypes")
 				final Vector classes = (Vector) field.get(cl);
 				for (final Object o : classes) {
